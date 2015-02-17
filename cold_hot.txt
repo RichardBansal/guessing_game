@@ -1,0 +1,5 @@
+Say "colder" when the Hunter is far from the object
+Indicate to the Hunter that they are moving away from the hidden object by saying "colder." If they keep moving in the wrong direction, words that indicate degrees of cold, such as "freezing" or "icy."
+STEP 5
+Say "hotter" when the Hunter is close to the object
+Tell the Hunter that they are getting closer to the hidden object by saying "hotter." As they move closer, say "burning" or "scorching."

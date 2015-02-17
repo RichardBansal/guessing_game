@@ -14,11 +14,14 @@ $(document).ready(function(){
       var hot_cold = "";
       var hot = [];
       var cold = [];
+      var current_guess =undefined;
+      var prev_guess = undefined;
 
       var onScreenAlerts = function(message, background){
         if(message)
         {
           $('h4').text(message);
+          $('h5').text('Hot Answers:'+hot+' | Cold Answers:'+cold);
         }
         if(background){
           $('body').css('background-color',background);
@@ -31,7 +34,7 @@ $(document).ready(function(){
         // if((guess === null)||(guess === '')){
         //   alert('You did not input a value');
         // }
-        if((+guess>100)||(+guess<1))
+        if((+guess>100)||(+guess<1)||(isNaN(+guess)))
         {
           //alert('Guess is not in the valid range of 1-100');
           //$('h4').text("Guess is not in the valid range of 1-100! Try again!");
@@ -43,17 +46,33 @@ $(document).ready(function(){
           if(+guess === randomNumber){
             //$('body').css('background-color','#88A7E0');
             //alert('You got the value after '+guesses+' guesses');
+             hot.push(+guess);
              onScreenAlerts('You got the value after '+ guesses +' guesses!!','#88A7E0');
+
           }
           else{
-            if(Math.abs(randomNumber-(+guess))>cold_delta){
-              hot_cold = "cold";
-              cold.push(+guess);
-            }
-            if(Math.abs(randomNumber-(+guess))<hot_delta){
-              hot_cold = "hot";
-              hot.push(+guess);
-            }
+            if(guesses < 5){
+              current_guess = Math.abs(randomNumber-(+guess))
+              if(prev_guess === undefined){
+                if(current_guess < hot_delta){
+                  hot_cold = "hot";
+                  hot.push(+guess);
+                }
+                else{
+                  hot_cold = "cold"
+                  cold.push(+guess);
+                }
+              }
+              else{
+                if(prev_guess < current_guess){
+                  hot_cold = "colder"
+                  cold.push(+guess);
+                }
+                else{
+                  hot_cold = "hotter"
+                  hot.push(+guess);
+                }
+              }
             if(guessRepeat.indexOf(+guess)>=0){
               //alert('C\'mon you already guessed '+guess+', try something different! You have '+(5-guesses)+' guesses left'+ ' You are '+hot_cold);
               onScreenAlerts('C\'mon you already guessed '+ guess +', try something different! You have '+(5-guesses)+' guesses left'+ ' You are '+hot_cold)
@@ -63,7 +82,12 @@ $(document).ready(function(){
               onScreenAlerts('Guess again, you have '+(5-guesses)+' guesses left'+ '. You are '+hot_cold)
               guessRepeat.push(+guess);
             }
-            console.log(hot,cold)
+            prev_guess = current_guess;
+          }
+          else {
+            onScreenAlerts("You are only allowed 5 Guesses! You can start a new game!");
+          }
+          console.log(hot,cold)
           }
         }
       }
@@ -80,14 +104,19 @@ $(document).ready(function(){
       });
 
       $('.new').click(function(){  
-        randomNumber = parseInt(Math.random()*100);
+        randomNumber = parseInt(Math.random()*100)+1;
         console.log('number is '+randomNumber);
         guess = null;
         guesses = 0;
         guessRepeat = [];
         hot = [];
         cold = [];
+        current_guess = undefined;
+        prev_guess = undefined;
         onScreenAlerts(' ','#81A6A9');
+        onScreenAlerts("New Game!");
+        $('input').val("");
+        $('input').attr('placeholder',"Guess a Number between 1-100");
         //$('body').css('background-color','#81A6A9');
       });
 
