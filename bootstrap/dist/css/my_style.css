@@ -9,3 +9,7 @@ body {
 .container {
 	display:none;
 }
+
+.form-control {
+	font-size: 13px;
+}

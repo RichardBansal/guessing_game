@@ -16,6 +16,9 @@ $(document).ready(function(){
       var cold = [];
       var current_guess =undefined;
       var prev_guess = undefined;
+      var higher_lower = "";
+      var youwon = false;
+      var gameover = false;
 
       var onScreenAlerts = function(message, background){
         if(message)
@@ -46,13 +49,16 @@ $(document).ready(function(){
           if(+guess === randomNumber){
             //$('body').css('background-color','#88A7E0');
             //alert('You got the value after '+guesses+' guesses');
-             hot.push(+guess);
+             //hot.push(+guess);
+             youwon = true;
              onScreenAlerts('You got the value after '+ guesses +' guesses!!','#88A7E0');
 
           }
           else{
             if(guesses < 5){
               current_guess = Math.abs(randomNumber-(+guess))
+              if(+guess<randomNumber){higher_lower='higher'}
+              else{higher_lower='lower'}
               if(prev_guess === undefined){
                 if(current_guess < hot_delta){
                   hot_cold = "hot";
@@ -79,13 +85,14 @@ $(document).ready(function(){
             }
             else{
               //alert('Guess again, you have '+(5-guesses)+' guesses left'+ ' You are '+hot_cold);
-              onScreenAlerts('Guess again, you have '+(5-guesses)+' guesses left'+ '. You are '+hot_cold)
+              onScreenAlerts('Guess '+higher_lower+', you have '+(5-guesses)+' guesses left'+ '. You are '+hot_cold)
               guessRepeat.push(+guess);
             }
             prev_guess = current_guess;
           }
           else {
-            onScreenAlerts("You are only allowed 5 Guesses! You can start a new game!");
+            onScreenAlerts("You are only allowed 5 Guesses! The number was "+randomNumber+". You can start a new game!");
+            gameover = true;
           }
           console.log(hot,cold)
           }
@@ -122,7 +129,7 @@ $(document).ready(function(){
 
       $('.hint').click(function(){  
         //console.log(randomNumber);
-        onScreenAlerts('Number is: ' + randomNumber);
+        if(!youwon&&!gameover){onScreenAlerts('Number is: ' + randomNumber + '. GameOver. You can start a new game!');}
       });
       //alert(randomNumber);
     });
