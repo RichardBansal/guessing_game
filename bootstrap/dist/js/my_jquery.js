@@ -5,7 +5,8 @@ $(document).ready(function(){
 
       var initialize = function(){   
         $('.container').fadeOut("fast");   
-        $('.container').fadeIn("slow");   
+        $('.container').fadeIn("slow");
+        $('input').focus();
         randomNumber = parseInt(Math.random()*100);
         hot_cold_delta = 20;
         console.log('number is '+randomNumber);
@@ -53,7 +54,10 @@ $(document).ready(function(){
 
           }
           else{
-            if(guess_count < 5){
+            if((guessRepeat.indexOf(+guess)>=0)&&(guess_count < 5)){
+              onScreenAlerts('C\'mon you already guessed '+ guess +', try something different!  Guess '+higher_lower+', You have '+(5-guess_count)+' guesses count left'+ ' You are '+hot_cold);
+            }
+            else if(guess_count < 5){
               current_guess = Math.abs(randomNumber-(+guess))
               if(+guess<randomNumber){higher_lower='higher'}
               else{higher_lower='lower'}
@@ -77,17 +81,14 @@ $(document).ready(function(){
                   hotArr.push(+guess);
                 }
               }
-            if(guessRepeat.indexOf(+guess)>=0){
-              onScreenAlerts('C\'mon you already guessed '+ guess +', try something different! You have '+(5-guess_count)+' guess_count left'+ ' You are '+hot_cold)
-            }
-            else{
-              onScreenAlerts('Guess '+higher_lower+', you have '+(5-guess_count)+' guess_count left'+ '. You are '+hot_cold)
+            //else{
+              onScreenAlerts('Guess '+higher_lower+', you have '+(5-guess_count)+' guesses count left'+ '. You are '+hot_cold)
               guessRepeat.push(+guess);
-            }
+            //}
             prev_guess = current_guess;
-          }
+            }
           else {
-            onScreenAlerts("You are only allowed 5 guess_count! The number was "+randomNumber+". You can start a new game!");
+            onScreenAlerts("You are only allowed 5 guesses! The number was "+randomNumber+". You can start a new game!");
             gameover = true;
           }
           console.log(hotArr,coldArr);
@@ -99,7 +100,7 @@ $(document).ready(function(){
         guessFn();
       });
 
-      $('.new').click(function(){  
+      $('.new').click(function(){   
         initialize();
         onScreenAlerts("New Game!");
       });
